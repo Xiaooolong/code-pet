@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Claude Pet - Debug</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; font-size: 20px; color: #a0a0ff; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .card {
+      background: #16213e;
+      border: 2px solid #333;
+      border-radius: 12px;
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+    .card:hover { border-color: #6060ff; transform: scale(1.03); }
+    .card.active { border-color: #a0a0ff; background: #1a1a4e; }
+    .card .label {
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: #c0c0ff;
+    }
+    .card svg { display: block; margin: 0 auto; }
+    .controls {
+      max-width: 800px;
+      margin: 20px auto;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .controls button {
+      background: #2a2a5e;
+      color: #e0e0e0;
+      border: 1px solid #555;
+      border-radius: 8px;
+      padding: 8px 16px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .controls button:hover { background: #3a3a7e; }
+    .controls button.active { background: #5050aa; border-color: #a0a0ff; }
+    .preview-area {
+      max-width: 800px;
+      margin: 20px auto;
+      text-align: center;
+    }
+    .preview-area svg {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid #333;
+      border-radius: 12px;
+    }
+    .preview-label {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #a0a0ff;
+    }
+    .cmd-hint {
+      max-width: 800px;
+      margin: 16px auto;
+      background: #0d1117;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 12px;
+      color: #8b949e;
+      text-align: center;
+    }
+    .cmd-hint code { color: #79c0ff; }
+  </style>
+</head>
+<body>
+  <h1>Claude Pet Debug Panel</h1>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="controls">
+    <button onclick="toggleAutoPlay()" id="btn-auto">Auto Play: OFF</button>
+    <button onclick="speedUp()">Speed +</button>
+    <button onclick="speedDown()">Speed -</button>
+    <span id="speed-label" style="font-size:12px;color:#888;">1.0x</span>
+  </div>
+
+  <div class="preview-area">
+    <div class="preview-label">Preview: <span id="current-state-label">idle</span></div>
+    <svg id="preview-svg" width="200" height="240" viewBox="0 0 150 180" style="background:rgba(255,255,255,0.03);border:1px solid #333;border-radius:12px;"></svg>
+  </div>
+
+  <div class="cmd-hint">
+    Send to running pet: <code>powershell.exe -File "E:\drafts\2026-03-13_002\claude-pet\hooks\claude-pet-hook.ps1" <span id="cmd-state">idle</span></code>
+  </div>
+
+  <script type="module">
+    import { renderPose, setFrameSeed } from './renderer.js';
+    import { renderDecorations } from './decorations.js';
+
+    const STATES = ['idle', 'thinking', 'coding', 'reading', 'running', 'celebrate', 'error', 'user_typing'];
+    const STATE_LABELS = {
+      idle: 'Idle (breathing)',
+      thinking: 'Thinking (head tilt)',
+      coding: 'Coding (typing)',
+      reading: 'Reading (book)',
+      running: 'Running (tools)',
+      celebrate: 'Celebrate (bounce)',
+      error: 'Error (shake)',
+      user_typing: 'User Typing (nod)',
+    };
+
+    let selectedState = 'idle';
+    let animTime = 0;
+    let speed = 1.0;
+    let autoPlay = false;
+    let autoIdx = 0;
+    let autoTimer = null;
+
+    const grid = document.getElementById('grid');
+    const previewSvg = document.getElementById('preview-svg');
+    const stateLabel = document.getElementById('current-state-label');
+    const cmdState = document.getElementById('cmd-state');
+
+    // Create grid cards
+    const cards = {};
+    STATES.forEach(state => {
+      const card = document.createElement('div');
+      card.className = 'card' + (state === selectedState ? ' active' : '');
+      card.innerHTML = `
+        <div class="label">${state}</div>
+        <svg width="120" height="140" viewBox="0 0 150 180"></svg>
+        <div style="font-size:10px;color:#666;margin-top:2px;">${STATE_LABELS[state]}</div>
+      `;
+      card.addEventListener('click', () => selectState(state));
+      grid.appendChild(card);
+      cards[state] = { el: card, svg: card.querySelector('svg') };
+    });
+
+    function selectState(state) {
+      Object.values(cards).forEach(c => c.el.classList.remove('active'));
+      cards[state].el.classList.add('active');
+      selectedState = state;
+      stateLabel.textContent = state;
+      cmdState.textContent = state;
+    }
+
+    // Animation loop
+    let lastTime = performance.now();
+    function animate(now) {
+      const dt = (now - lastTime) / 1000 * speed;
+      lastTime = now;
+      animTime += dt;
+
+      setFrameSeed(animTime);
+
+      // Render all thumbnails
+      STATES.forEach(state => {
+        const svg = cards[state].svg;
+        svg.innerHTML = renderPose(state, animTime) + renderDecorations(state, animTime);
+      });
+
+      // Render large preview
+      previewSvg.innerHTML = renderPose(selectedState, animTime) + renderDecorations(selectedState, animTime);
+
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+
+    // Auto-play: cycle through states
+    window.toggleAutoPlay = function() {
+      autoPlay = !autoPlay;
+      document.getElementById('btn-auto').textContent = `Auto Play: ${autoPlay ? 'ON' : 'OFF'}`;
+      document.getElementById('btn-auto').classList.toggle('active', autoPlay);
+      if (autoPlay) {
+        autoIdx = STATES.indexOf(selectedState);
+        autoTimer = setInterval(() => {
+          autoIdx = (autoIdx + 1) % STATES.length;
+          selectState(STATES[autoIdx]);
+        }, 3000);
+      } else {
+        clearInterval(autoTimer);
+      }
+    };
+
+    window.speedUp = function() {
+      speed = Math.min(speed + 0.5, 5);
+      document.getElementById('speed-label').textContent = speed.toFixed(1) + 'x';
+    };
+
+    window.speedDown = function() {
+      speed = Math.max(speed - 0.5, 0.5);
+      document.getElementById('speed-label').textContent = speed.toFixed(1) + 'x';
+    };
+  </script>
+</body>
+</html>

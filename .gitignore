@@ -1,0 +1,21 @@
+# Rust build output
+src-tauri/target/
+src-tauri/gen/schemas
+
+# Node
+node_modules/
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude Pet runtime data
+.claude-pet/
