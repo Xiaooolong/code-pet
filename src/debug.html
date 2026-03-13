@@ -2,121 +2,169 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Claude Pet - Debug</title>
+  <title>Code Pet - Debug</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
-    h1 { text-align: center; margin-bottom: 20px; font-size: 20px; color: #a0a0ff; }
+    body {
+      background: #0f0f0f;
+      color: #ccc;
+      font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+      padding: 32px 24px;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 28px;
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      max-width: 800px;
+      gap: 12px;
+      max-width: 720px;
       margin: 0 auto;
     }
     .card {
-      background: #16213e;
-      border: 2px solid #333;
-      border-radius: 12px;
-      padding: 8px;
+      background: #1a1a1a;
+      border: 1.5px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 10px 8px 8px;
       text-align: center;
       cursor: pointer;
-      transition: border-color 0.2s, transform 0.1s;
+      transition: all 0.15s ease;
     }
-    .card:hover { border-color: #6060ff; transform: scale(1.03); }
-    .card.active { border-color: #a0a0ff; background: #1a1a4e; }
+    .card:hover { border-color: #444; background: #1e1e1e; }
+    .card.active { border-color: #e0e0e0; background: #222; }
     .card .label {
-      font-size: 13px;
-      font-weight: bold;
+      font-size: 11px;
+      font-weight: 600;
       margin-bottom: 4px;
-      color: #c0c0ff;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+    .card.active .label { color: #fff; }
     .card svg { display: block; margin: 0 auto; }
+    .card .desc {
+      font-size: 10px;
+      color: #555;
+      margin-top: 4px;
+    }
     .controls {
-      max-width: 800px;
-      margin: 20px auto;
+      max-width: 720px;
+      margin: 24px auto;
       display: flex;
-      gap: 12px;
+      gap: 8px;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
     }
     .controls button {
-      background: #2a2a5e;
-      color: #e0e0e0;
-      border: 1px solid #555;
-      border-radius: 8px;
-      padding: 8px 16px;
+      background: #1a1a1a;
+      color: #aaa;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 6px 14px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.15s ease;
     }
-    .controls button:hover { background: #3a3a7e; }
-    .controls button.active { background: #5050aa; border-color: #a0a0ff; }
+    .controls button:hover { background: #252525; color: #ddd; border-color: #444; }
+    .controls button.active { background: #333; color: #fff; border-color: #555; }
+    .speed-label {
+      font-size: 12px;
+      color: #555;
+      font-variant-numeric: tabular-nums;
+      min-width: 32px;
+      text-align: center;
+    }
+    .divider {
+      width: 1px;
+      height: 20px;
+      background: #2a2a2a;
+      margin: 0 4px;
+    }
     .preview-area {
-      max-width: 800px;
-      margin: 20px auto;
+      max-width: 720px;
+      margin: 24px auto;
       text-align: center;
     }
     .preview-area svg {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid #333;
+      background: #141414;
+      border: 1.5px solid #2a2a2a;
       border-radius: 12px;
     }
     .preview-label {
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: #a0a0ff;
+      font-size: 13px;
+      margin-bottom: 10px;
+      color: #666;
+      font-weight: 500;
     }
+    .preview-label span { color: #fff; }
     .cmd-hint {
-      max-width: 800px;
-      margin: 16px auto;
-      background: #0d1117;
-      border: 1px solid #333;
+      max-width: 720px;
+      margin: 20px auto;
+      background: #141414;
+      border: 1px solid #2a2a2a;
       border-radius: 8px;
-      padding: 12px 16px;
-      font-family: 'Cascadia Code', 'Consolas', monospace;
-      font-size: 12px;
-      color: #8b949e;
+      padding: 10px 16px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 11px;
+      color: #555;
       text-align: center;
     }
-    .cmd-hint code { color: #79c0ff; }
+    .cmd-hint code { color: #888; }
   </style>
 </head>
 <body>
-  <h1>Claude Pet Debug Panel</h1>
+  <h1>Code Pet</h1>
+  <div class="subtitle">Animation Debug Panel</div>
 
   <div class="grid" id="grid"></div>
 
   <div class="controls">
-    <button onclick="toggleAutoPlay()" id="btn-auto">Auto Play: OFF</button>
-    <button onclick="speedUp()">Speed +</button>
-    <button onclick="speedDown()">Speed -</button>
-    <span id="speed-label" style="font-size:12px;color:#888;">1.0x</span>
+    <button onclick="toggleAutoPlay()" id="btn-auto">Auto Play</button>
+    <button onclick="doToggleTheme()" id="btn-theme">Theme: Dark</button>
+    <div class="divider"></div>
+    <button onclick="speedDown()">-</button>
+    <span class="speed-label" id="speed-label">1.0x</span>
+    <button onclick="speedUp()">+</button>
   </div>
 
   <div class="preview-area">
     <div class="preview-label">Preview: <span id="current-state-label">idle</span></div>
-    <svg id="preview-svg" width="200" height="240" viewBox="0 0 150 180" style="background:rgba(255,255,255,0.03);border:1px solid #333;border-radius:12px;"></svg>
+    <svg id="preview-svg" width="200" height="240" viewBox="0 0 150 180"></svg>
   </div>
 
   <div class="cmd-hint">
-    Send to running pet: <code>powershell.exe -File "E:\drafts\2026-03-13_002\claude-pet\hooks\claude-pet-hook.ps1" <span id="cmd-state">idle</span></code>
+    Trigger state: <code>claude-pet-hook.ps1 <span id="cmd-state">idle</span></code>
   </div>
 
   <script type="module">
     import { renderPose, setFrameSeed } from './renderer.js';
     import { renderDecorations } from './decorations.js';
+    import { toggleTheme, getTheme } from './theme.js';
 
     const STATES = ['idle', 'thinking', 'coding', 'reading', 'running', 'celebrate', 'error', 'user_typing'];
     const STATE_LABELS = {
-      idle: 'Idle (breathing)',
-      thinking: 'Thinking (head tilt)',
-      coding: 'Coding (typing)',
-      reading: 'Reading (book)',
-      running: 'Running (tools)',
-      celebrate: 'Celebrate (bounce)',
-      error: 'Error (shake)',
-      user_typing: 'User Typing (nod)',
+      idle: 'Sipping tea',
+      thinking: 'Head scratch',
+      coding: 'Typing away',
+      reading: 'Book worm',
+      running: 'On the move',
+      celebrate: 'Party time',
+      error: 'Uh oh',
+      user_typing: 'Catching input',
     };
 
     let selectedState = 'idle';
@@ -137,9 +185,9 @@
       const card = document.createElement('div');
       card.className = 'card' + (state === selectedState ? ' active' : '');
       card.innerHTML = `
-        <div class="label">${state}</div>
+        <div class="label">${state.replace('_', ' ')}</div>
         <svg width="120" height="140" viewBox="0 0 150 180"></svg>
-        <div style="font-size:10px;color:#666;margin-top:2px;">${STATE_LABELS[state]}</div>
+        <div class="desc">${STATE_LABELS[state]}</div>
       `;
       card.addEventListener('click', () => selectState(state));
       grid.appendChild(card);
@@ -179,8 +227,9 @@
     // Auto-play: cycle through states
     window.toggleAutoPlay = function() {
       autoPlay = !autoPlay;
-      document.getElementById('btn-auto').textContent = `Auto Play: ${autoPlay ? 'ON' : 'OFF'}`;
-      document.getElementById('btn-auto').classList.toggle('active', autoPlay);
+      const btn = document.getElementById('btn-auto');
+      btn.textContent = autoPlay ? 'Stop' : 'Auto Play';
+      btn.classList.toggle('active', autoPlay);
       if (autoPlay) {
         autoIdx = STATES.indexOf(selectedState);
         autoTimer = setInterval(() => {
@@ -200,6 +249,19 @@
     window.speedDown = function() {
       speed = Math.max(speed - 0.5, 0.5);
       document.getElementById('speed-label').textContent = speed.toFixed(1) + 'x';
+    };
+
+    window.doToggleTheme = function() {
+      toggleTheme();
+      const t = getTheme();
+      document.getElementById('btn-theme').textContent = `Theme: ${t === 'dark' ? 'Dark' : 'Light'}`;
+      document.body.style.background = t === 'dark' ? '#0f0f0f' : '#f5f5f5';
+      document.body.style.color = t === 'dark' ? '#ccc' : '#333';
+      document.querySelectorAll('.card').forEach(c => {
+        c.style.background = t === 'dark' ? '#1a1a1a' : '#fff';
+        c.style.borderColor = t === 'dark' ? '#2a2a2a' : '#ddd';
+      });
+      document.querySelector('.preview-area svg').style.background = t === 'dark' ? '#141414' : '#fafafa';
     };
   </script>
 </body>

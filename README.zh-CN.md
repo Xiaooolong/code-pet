@@ -1,6 +1,8 @@
-# Claude Pet
+# Code Pet
 
 一个跟随 Claude Code 工作状态实时变化的桌面宠物。手绘涂鸦风格的火柴小人会根据 Claude 当前在做什么（思考、写代码、读文件、跑命令……）做出不同的动画反应。
+
+[![English](https://img.shields.io/badge/lang-English-blue)](./README.md) [![中文](https://img.shields.io/badge/lang-中文-red)](./README.zh-CN.md)
 
 ## 效果预览
 

@@ -1,5 +1,6 @@
 // renderer.js - SVG doodle character poses for each state
 // Each pose returns an SVG group string to inject into the main SVG
+import { getColor, getFill } from './theme.js';
 
 // Deterministic noise for hand-drawn feel (no Math.random per frame)
 function noise(seed) {
@@ -25,7 +26,7 @@ function drawHead(cx, cy, r) {
     Q${j(cx + r * 1.1, 3)} ${j(cy - r, 4)} ${cx + r} ${j(cy, 5)}
     Q${j(cx + r, 6)} ${j(cy + r * 1.1, 7)} ${j(cx, 8)} ${cy + r}
     Q${j(cx - r * 1.1, 9)} ${j(cy + r, 10)} ${cx - r} ${cy}Z"
-    fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linejoin="round"/>`;
+    fill="none" stroke="${getColor()}" stroke-width="2" stroke-linejoin="round"/>`;
 }
 
 // Blush cheeks - cute pink circles
@@ -46,95 +47,95 @@ function drawEyes(cx, cy, state) {
   if (state === 'error') {
     // Spinning X eyes
     return `
-      <line x1="${cx - 13}" y1="${cy - 4}" x2="${cx - 5}" y2="${cy + 4}" stroke="#e0e0e0" stroke-width="2"/>
-      <line x1="${cx - 5}" y1="${cy - 4}" x2="${cx - 13}" y2="${cy + 4}" stroke="#e0e0e0" stroke-width="2"/>
-      <line x1="${cx + 5}" y1="${cy - 4}" x2="${cx + 13}" y2="${cy + 4}" stroke="#e0e0e0" stroke-width="2"/>
-      <line x1="${cx + 13}" y1="${cy - 4}" x2="${cx + 5}" y2="${cy + 4}" stroke="#e0e0e0" stroke-width="2"/>`;
+      <line x1="${cx - 13}" y1="${cy - 4}" x2="${cx - 5}" y2="${cy + 4}" stroke="${getColor()}" stroke-width="2"/>
+      <line x1="${cx - 5}" y1="${cy - 4}" x2="${cx - 13}" y2="${cy + 4}" stroke="${getColor()}" stroke-width="2"/>
+      <line x1="${cx + 5}" y1="${cy - 4}" x2="${cx + 13}" y2="${cy + 4}" stroke="${getColor()}" stroke-width="2"/>
+      <line x1="${cx + 13}" y1="${cy - 4}" x2="${cx + 5}" y2="${cy + 4}" stroke="${getColor()}" stroke-width="2"/>`;
   }
   if (state === 'celebrate') {
     // Big happy ^ ^ eyes
     return `
-      <path d="M${cx - 14} ${cy + 2} Q${cx - 9} ${cy - 7} ${cx - 4} ${cy + 2}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M${cx + 4} ${cy + 2} Q${cx + 9} ${cy - 7} ${cx + 14} ${cy + 2}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>`;
+      <path d="M${cx - 14} ${cy + 2} Q${cx - 9} ${cy - 7} ${cx - 4} ${cy + 2}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M${cx + 4} ${cy + 2} Q${cx + 9} ${cy - 7} ${cx + 14} ${cy + 2}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>`;
   }
   if (state === 'coding') {
     // Focused dot eyes - intense stare
     return `
-      <circle cx="${cx - 8}" cy="${cy}" r="2" fill="#e0e0e0"/>
-      <circle cx="${cx + 8}" cy="${cy}" r="2" fill="#e0e0e0"/>`;
+      <circle cx="${cx - 8}" cy="${cy}" r="2" fill="${getColor()}"/>
+      <circle cx="${cx + 8}" cy="${cy}" r="2" fill="${getColor()}"/>`;
   }
   if (state === 'thinking') {
     // One eye bigger, looking up
     return `
-      <circle cx="${cx - 9}" cy="${cy - 2}" r="4" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx - 8}" cy="${cy - 3}" r="1.8" fill="#e0e0e0"/>
-      <circle cx="${cx + 9}" cy="${cy - 1}" r="5" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx + 10}" cy="${cy - 3}" r="2.2" fill="#e0e0e0"/>`;
+      <circle cx="${cx - 9}" cy="${cy - 2}" r="4" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx - 8}" cy="${cy - 3}" r="1.8" fill="${getColor()}"/>
+      <circle cx="${cx + 9}" cy="${cy - 1}" r="5" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx + 10}" cy="${cy - 3}" r="2.2" fill="${getColor()}"/>`;
   }
   if (state === 'running') {
     // Wide panicked eyes
     return `
-      <circle cx="${cx - 9}" cy="${cy}" r="5" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx - 9}" cy="${cy}" r="2" fill="#e0e0e0"/>
-      <circle cx="${cx + 9}" cy="${cy}" r="5" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx + 9}" cy="${cy}" r="2" fill="#e0e0e0"/>`;
+      <circle cx="${cx - 9}" cy="${cy}" r="5" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx - 9}" cy="${cy}" r="2" fill="${getColor()}"/>
+      <circle cx="${cx + 9}" cy="${cy}" r="5" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx + 9}" cy="${cy}" r="2" fill="${getColor()}"/>`;
   }
   if (state === 'reading') {
     // Open eyes looking downward at book
     return `
-      <circle cx="${cx - 8}" cy="${cy}" r="4" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx - 8}" cy="${cy + 2}" r="1.5" fill="#e0e0e0"/>
-      <circle cx="${cx + 8}" cy="${cy}" r="4" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx + 8}" cy="${cy + 2}" r="1.5" fill="#e0e0e0"/>`;
+      <circle cx="${cx - 8}" cy="${cy}" r="4" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx - 8}" cy="${cy + 2}" r="1.5" fill="${getColor()}"/>
+      <circle cx="${cx + 8}" cy="${cy}" r="4" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx + 8}" cy="${cy + 2}" r="1.5" fill="${getColor()}"/>`;
   }
   if (state === 'user_typing') {
     // Panicked wide eyes
     return `
-      <circle cx="${cx - 8}" cy="${cy}" r="5" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx - 8}" cy="${cy}" r="2.5" fill="#e0e0e0"/>
-      <circle cx="${cx + 8}" cy="${cy}" r="5" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <circle cx="${cx + 8}" cy="${cy}" r="2.5" fill="#e0e0e0"/>`;
+      <circle cx="${cx - 8}" cy="${cy}" r="5" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx - 8}" cy="${cy}" r="2.5" fill="${getColor()}"/>
+      <circle cx="${cx + 8}" cy="${cy}" r="5" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <circle cx="${cx + 8}" cy="${cy}" r="2.5" fill="${getColor()}"/>`;
   }
   // Normal asymmetric eyes (idle)
   return `
-    <circle cx="${cx - 9}" cy="${cy}" r="3.5" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-    <circle cx="${cx - 8}" cy="${cy + 1}" r="1.5" fill="#e0e0e0"/>
-    <circle cx="${cx + 9}" cy="${cy}" r="4" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-    <circle cx="${cx + 10}" cy="${cy + 1}" r="1.8" fill="#e0e0e0"/>`;
+    <circle cx="${cx - 9}" cy="${cy}" r="3.5" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+    <circle cx="${cx - 8}" cy="${cy + 1}" r="1.5" fill="${getColor()}"/>
+    <circle cx="${cx + 9}" cy="${cy}" r="4" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+    <circle cx="${cx + 10}" cy="${cy + 1}" r="1.8" fill="${getColor()}"/>`;
 }
 
 // Shared mouth - more expressive
 function drawMouth(cx, cy, state) {
   if (state === 'celebrate') {
     // Big open grin
-    return `<path d="M${cx - 10} ${cy - 1} Q${cx} ${cy + 14} ${cx + 10} ${cy - 1}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>`;
+    return `<path d="M${cx - 10} ${cy - 1} Q${cx} ${cy + 14} ${cx + 10} ${cy - 1}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>`;
   }
   if (state === 'error') {
     // Wobbly frown
-    return `<path d="M${cx - 8} ${cy + 6} Q${cx - 3} ${cy - 1} ${cx} ${cy + 3} Q${cx + 3} ${cy - 1} ${cx + 8} ${cy + 6}" fill="none" stroke="#e0e0e0" stroke-width="1.8" stroke-linecap="round"/>`;
+    return `<path d="M${cx - 8} ${cy + 6} Q${cx - 3} ${cy - 1} ${cx} ${cy + 3} Q${cx + 3} ${cy - 1} ${cx + 8} ${cy + 6}" fill="none" stroke="${getColor()}" stroke-width="1.8" stroke-linecap="round"/>`;
   }
   if (state === 'coding') {
     // Tight determined line with slight curl
-    return `<path d="M${cx - 5} ${cy + 1} L${cx + 3} ${cy} L${cx + 6} ${cy - 2}" fill="none" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round"/>`;
+    return `<path d="M${cx - 5} ${cy + 1} L${cx + 3} ${cy} L${cx + 6} ${cy - 2}" fill="none" stroke="${getColor()}" stroke-width="1.5" stroke-linecap="round"/>`;
   }
   if (state === 'running') {
     // Open mouth panting
-    return `<ellipse cx="${cx}" cy="${cy + 3}" rx="5" ry="4" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>`;
+    return `<ellipse cx="${cx}" cy="${cy + 3}" rx="5" ry="4" fill="none" stroke="${getColor()}" stroke-width="1.5"/>`;
   }
   if (state === 'thinking') {
     // Small 'o' mouth
-    return `<circle cx="${cx + 2}" cy="${cy + 2}" r="3" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>`;
+    return `<circle cx="${cx + 2}" cy="${cy + 2}" r="3" fill="none" stroke="${getColor()}" stroke-width="1.5"/>`;
   }
   if (state === 'user_typing') {
     // Panicked open mouth
-    return `<ellipse cx="${cx}" cy="${cy + 3}" rx="4" ry="5" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>`;
+    return `<ellipse cx="${cx}" cy="${cy + 3}" rx="4" ry="5" fill="none" stroke="${getColor()}" stroke-width="1.5"/>`;
   }
   if (state === 'reading') {
     // Quiet content line
-    return `<path d="M${cx - 4} ${cy + 1} Q${cx} ${cy + 3} ${cx + 4} ${cy + 1}" fill="none" stroke="#e0e0e0" stroke-width="1.2" stroke-linecap="round"/>`;
+    return `<path d="M${cx - 4} ${cy + 1} Q${cx} ${cy + 3} ${cx + 4} ${cy + 1}" fill="none" stroke="${getColor()}" stroke-width="1.2" stroke-linecap="round"/>`;
   }
   // Subtle smile (idle)
-  return `<path d="M${cx - 6} ${cy} Q${cx} ${cy + 5} ${cx + 6} ${cy}" fill="none" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round"/>`;
+  return `<path d="M${cx - 6} ${cy} Q${cx} ${cy + 5} ${cx + 6} ${cy}" fill="none" stroke="${getColor()}" stroke-width="1.5" stroke-linecap="round"/>`;
 }
 
 // Draw chaotic thinking scribble above head using Lissajous curves
@@ -161,28 +162,52 @@ function drawThinkingScribble(cx, cy, t) {
       pts.push(`${px.toFixed(1)},${py.toFixed(1)}`);
     }
     curves.push(`<polyline points="${pts.join(' ')}"
-      fill="none" stroke="#e0e0e0" stroke-width="${w}" opacity="${op}" stroke-linecap="round" stroke-linejoin="round"/>`);
+      fill="none" stroke="${getColor()}" stroke-width="${w}" opacity="${op}" stroke-linecap="round" stroke-linejoin="round"/>`);
   }
   // Small connecting tail from head to scribble cloud
   const tailWobble = Math.sin(t * 4) * 3;
   curves.push(`<path d="M${cx} ${cy - 5} Q${cx + tailWobble} ${cy - 14} ${cx - tailWobble} ${cy - 20}"
-    fill="none" stroke="#e0e0e0" stroke-width="1" opacity="0.4" stroke-linecap="round"/>`);
+    fill="none" stroke="${getColor()}" stroke-width="1" opacity="0.4" stroke-linecap="round"/>`);
   return curves.join('');
 }
 
 export const poses = {
   idle(t) {
-    const breathe = Math.sin(t * 2) * 2;
+    const breathe = Math.sin(t * 2) * 1.5;
+    // Sipping tea animation: cup tilts up periodically
+    const sipCycle = t % 4; // 4 second cycle
+    const sipping = sipCycle < 1.5; // sip for 1.5s
+    const sipAmount = sipping ? Math.sin(sipCycle / 1.5 * Math.PI) * 12 : 0;
+    // Right arm holds cup, lifts when sipping
+    const cupY = 58 - sipAmount;
+    const cupX = 22;
+    // Steam from cup
+    const steam1Y = cupY - 12 - (t * 15 % 20);
+    const steam1Op = Math.max(0, 1 - (t * 15 % 20) / 20);
+    const steam2Y = cupY - 10 - ((t * 15 + 10) % 20);
+    const steam2Op = Math.max(0, 1 - ((t * 15 + 10) % 20) / 20);
     return `<g transform="translate(75, 10)">
       ${drawHead(0, 22, 18)}
       ${drawBlush(0, 22, 'idle')}
       ${drawEyes(0, 20, 'idle')}
       ${drawMouth(0, 32, 'idle')}
-      <path d="M0 40 Q-2 70 0 ${90 + breathe}" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M-3 55 Q-25 52 -30 68" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M3 57 Q25 54 28 72" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M-2 ${90 + breathe} Q-12 ${120 + breathe} -20 ${140 + breathe}" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M2 ${90 + breathe} Q12 ${120 + breathe} 22 ${140 + breathe}" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M0 40 Q-2 70 0 ${90 + breathe}" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- left arm relaxed -->
+      <path d="M-3 55 Q-25 52 -30 68" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <!-- tea cup: handle faces left toward hand -->
+      <g transform="translate(${cupX}, ${cupY}) rotate(${-sipAmount * 0.8})">
+        <path d="M0 4 L1 9 L11 9 L12 4" fill="${getColor()}" opacity="0.45" stroke="none"/>
+        <path d="M-1 0 L0 10 L12 10 L13 0" fill="none" stroke="${getColor()}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M-1 2 Q-6 3 -5 7 Q-4 10 0 9" fill="none" stroke="${getColor()}" stroke-width="1.2" stroke-linecap="round"/>
+      </g>
+      <!-- right arm: hand connects to cup handle -->
+      <path d="M3 50 Q${12 + sipAmount * 0.3} ${52 - sipAmount * 0.4} ${cupX - 4} ${cupY + 5}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <!-- steam -->
+      <path d="M${cupX} ${steam1Y} Q${cupX + 3} ${steam1Y - 4} ${cupX + 1} ${steam1Y - 8}" fill="none" stroke="${getColor()}" stroke-width="1" stroke-linecap="round" opacity="${steam1Op * 0.4}"/>
+      <path d="M${cupX + 4} ${steam2Y} Q${cupX + 7} ${steam2Y - 3} ${cupX + 5} ${steam2Y - 7}" fill="none" stroke="${getColor()}" stroke-width="1" stroke-linecap="round" opacity="${steam2Op * 0.4}"/>
+      <!-- legs -->
+      <path d="M-2 ${90 + breathe} Q-12 ${120 + breathe} -20 ${140 + breathe}" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M2 ${90 + breathe} Q12 ${120 + breathe} 22 ${140 + breathe}" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
     </g>`;
   },
 
@@ -198,11 +223,11 @@ export const poses = {
         ${drawMouth(0, 32, 'thinking')}
       </g>
       ${drawThinkingScribble(0, 0, t15)}
-      <path d="M0 40 Q-4 65 -2 88" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M-3 50 Q-18 38 ${-14 + scratch} ${24 + scratch}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M3 55 Q25 52 30 68" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M-3 88 Q-12 116 -20 138" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M1 88 Q10 116 20 138" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M0 40 Q-4 65 -2 88" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M-3 50 Q-18 38 ${-14 + scratch} ${24 + scratch}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M3 55 Q25 52 30 68" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-3 88 Q-12 116 -20 138" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M1 88 Q10 116 20 138" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
     </g>`;
   },
 
@@ -223,15 +248,15 @@ export const poses = {
         ${drawEyes(0, 20, 'coding')}
         ${drawMouth(0, 31, 'coding')}
       </g>
-      <path d="M0 40 Q${-3 + hunch} 58 ${-2 + hunch} 76" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M-3 50 Q-22 60 ${-28 + handL} ${72 + handL}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M3 52 Q22 62 ${28 + handR} ${74 + handR}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M-2 76 Q${-10 + hunch} ${100 + hunch} ${-16 + hunch * 1.5} 120" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M2 76 Q${10 + hunch} ${100 - hunch} ${16 + hunch * 1.5} 120" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <rect x="-32" y="73" width="64" height="40" rx="3" fill="none" stroke="#e0e0e0" stroke-width="1.5"/>
-      <line x1="-24" y1="${flickerY1 + 8}" x2="${-5 + Math.sin(t15 * 20) * 8}" y2="${flickerY1 + 8}" stroke="#e0e0e0" stroke-width="1" opacity="0.7"/>
-      <line x1="-22" y1="${flickerY2 + 8}" x2="${12 + Math.cos(t15 * 15) * 6}" y2="${flickerY2 + 8}" stroke="#e0e0e0" stroke-width="1" opacity="0.5"/>
-      <line x1="-20" y1="${84 + (t15 * 90 % 25)}" x2="${3 + Math.sin(t15 * 25) * 5}" y2="${84 + (t15 * 90 % 25)}" stroke="#e0e0e0" stroke-width="0.8" opacity="0.4"/>
+      <path d="M0 40 Q${-3 + hunch} 58 ${-2 + hunch} 76" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M-3 50 Q-22 60 ${-28 + handL} ${72 + handL}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M3 52 Q22 62 ${28 + handR} ${74 + handR}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-2 76 Q${-10 + hunch} ${100 + hunch} ${-16 + hunch * 1.5} 120" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M2 76 Q${10 + hunch} ${100 - hunch} ${16 + hunch * 1.5} 120" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="-32" y="73" width="64" height="40" rx="3" fill="none" stroke="${getColor()}" stroke-width="1.5"/>
+      <line x1="-24" y1="${flickerY1 + 8}" x2="${-5 + Math.sin(t15 * 20) * 8}" y2="${flickerY1 + 8}" stroke="${getColor()}" stroke-width="1" opacity="0.7"/>
+      <line x1="-22" y1="${flickerY2 + 8}" x2="${12 + Math.cos(t15 * 15) * 6}" y2="${flickerY2 + 8}" stroke="${getColor()}" stroke-width="1" opacity="0.5"/>
+      <line x1="-20" y1="${84 + (t15 * 90 % 25)}" x2="${3 + Math.sin(t15 * 25) * 5}" y2="${84 + (t15 * 90 % 25)}" stroke="${getColor()}" stroke-width="0.8" opacity="0.4"/>
     </g>`;
   },
 
@@ -245,27 +270,27 @@ export const poses = {
         ${drawEyes(0, 20, 'reading')}
         ${drawMouth(0, 32, 'reading')}
       </g>
-      <path d="M0 40 Q-3 65 -2 88" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M0 40 Q-3 65 -2 88" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
       <!-- left arm: relaxed down -->
-      <path d="M-3 55 Q-22 58 -28 72" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-3 55 Q-22 58 -28 72" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
       <!-- right arm: holding book at lower-left edge -->
-      <path d="M3 55 Q18 58 22 66" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M-2 88 Q-10 112 -18 135" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M2 88 Q10 112 18 135" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M3 55 Q18 58 22 66" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-2 88 Q-10 112 -18 135" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M2 88 Q10 112 18 135" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
       <!-- book: held in right hand, tilted slightly -->
       <g transform="translate(22, 48) rotate(-5)">
-        <path d="M0 0 Q5 -3 10 0" fill="none" stroke="#e0e0e0" stroke-width="1.2" stroke-linecap="round"/>
-        <path d="M10 0 Q15 -3 20 0" fill="none" stroke="#e0e0e0" stroke-width="1.2" stroke-linecap="round"/>
-        <line x1="0" y1="0" x2="0" y2="24" stroke="#e0e0e0" stroke-width="1.2"/>
-        <line x1="20" y1="0" x2="20" y2="24" stroke="#e0e0e0" stroke-width="1.2"/>
-        <path d="M0 24 Q5 27 10 24" fill="none" stroke="#e0e0e0" stroke-width="1.2" stroke-linecap="round"/>
-        <path d="M10 24 Q15 27 20 24" fill="none" stroke="#e0e0e0" stroke-width="1.2" stroke-linecap="round"/>
-        <line x1="10" y1="0" x2="10" y2="24" stroke="#e0e0e0" stroke-width="0.8"/>
-        <line x1="3" y1="6" x2="8" y2="6" stroke="#e0e0e0" stroke-width="0.5" opacity="0.4"/>
-        <line x1="3" y1="10" x2="7" y2="10" stroke="#e0e0e0" stroke-width="0.5" opacity="0.4"/>
-        <line x1="12" y1="6" x2="18" y2="6" stroke="#e0e0e0" stroke-width="0.5" opacity="0.4"/>
-        <line x1="12" y1="10" x2="16" y2="10" stroke="#e0e0e0" stroke-width="0.5" opacity="0.4"/>
-        ${pageFlip > 0.8 ? `<path d="M18 0 Q22 12 18 24" fill="none" stroke="#e0e0e0" stroke-width="0.6" opacity="0.4"/>` : ''}
+        <path d="M0 0 Q5 -3 10 0" fill="none" stroke="${getColor()}" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M10 0 Q15 -3 20 0" fill="none" stroke="${getColor()}" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="0" y1="0" x2="0" y2="24" stroke="${getColor()}" stroke-width="1.2"/>
+        <line x1="20" y1="0" x2="20" y2="24" stroke="${getColor()}" stroke-width="1.2"/>
+        <path d="M0 24 Q5 27 10 24" fill="none" stroke="${getColor()}" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M10 24 Q15 27 20 24" fill="none" stroke="${getColor()}" stroke-width="1.2" stroke-linecap="round"/>
+        <line x1="10" y1="0" x2="10" y2="24" stroke="${getColor()}" stroke-width="0.8"/>
+        <line x1="3" y1="6" x2="8" y2="6" stroke="${getColor()}" stroke-width="0.5" opacity="0.4"/>
+        <line x1="3" y1="10" x2="7" y2="10" stroke="${getColor()}" stroke-width="0.5" opacity="0.4"/>
+        <line x1="12" y1="6" x2="18" y2="6" stroke="${getColor()}" stroke-width="0.5" opacity="0.4"/>
+        <line x1="12" y1="10" x2="16" y2="10" stroke="${getColor()}" stroke-width="0.5" opacity="0.4"/>
+        ${pageFlip > 0.8 ? `<path d="M18 0 Q22 12 18 24" fill="none" stroke="${getColor()}" stroke-width="0.6" opacity="0.4"/>` : ''}
       </g>
     </g>`;
   },
@@ -285,15 +310,15 @@ export const poses = {
         ${drawBlush(0, 22, 'running')}
         ${drawEyes(0, 20, 'running')}
         ${drawMouth(0, 32, 'running')}
-        <path d="M0 40 Q-2 60 -1 82" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M0 40 Q-2 60 -1 82" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
         <!-- arms: swing from shoulder, bent elbow, hand up -->
         ${(() => {
           const sArmL = Math.sin(t * 9 + Math.PI);
           const sArmR = s;
           const armPath = (ox, sVal) => {
-            const rot = 15 - sVal * 35;
+            const rot = 68 - sVal * 67; // range: 1 to 135
             return `<g transform="rotate(${rot}, ${ox}, 50)">
-              <path d="M${ox} 50 Q${ox + 14} 52 ${ox + 6} 38" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
+              <path d="M${ox} 50 Q${ox + 14} 52 ${ox + 6} 38" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
             </g>`;
           };
           return armPath(-3, sArmL) + armPath(3, sArmR);
@@ -310,7 +335,7 @@ export const poses = {
             const bow = bend * 14;
             const tuck = bend * 18;
             return `<g transform="rotate(${rot}, 0, 82)">
-              <path d="M${ox} 82 C${ox + (6 + bow)} 96 ${ox + (10 + bow)} ${118 - tuck} ${ox + 14} ${140 - tuck}" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M${ox} 82 C${ox + (6 + bow)} 96 ${ox + (10 + bow)} ${118 - tuck} ${ox + 14} ${140 - tuck}" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
             </g>`;
           };
           return legPath(-2, bendL, legRotL) + legPath(2, bendR, legRotR);
@@ -321,7 +346,7 @@ export const poses = {
         const ly = 40 + i * 22;
         const phase = (t * 40 + i * 13) % 30;
         const op = Math.max(0, 1 - phase / 30);
-        return `<line x1="${-20 - phase}" y1="${ly}" x2="${-10 - phase}" y2="${ly}" stroke="#e0e0e0" stroke-width="1.2" opacity="${op * 0.5}" stroke-linecap="round"/>`;
+        return `<line x1="${-20 - phase}" y1="${ly}" x2="${-10 - phase}" y2="${ly}" stroke="${getColor()}" stroke-width="1.2" opacity="${op * 0.5}" stroke-linecap="round"/>`;
       }).join('')}
     </g>`;
   },
@@ -334,15 +359,15 @@ export const poses = {
       ${drawBlush(0, 22, 'celebrate')}
       ${drawEyes(0, 20, 'celebrate')}
       ${drawMouth(0, 32, 'celebrate')}
-      <path d="M0 40 Q-2 65 0 88" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M0 40 Q-2 65 0 88" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
       <g transform="rotate(${armRot}, -3, 48)">
-        <path d="M-3 48 Q-28 32 -35 20" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
+        <path d="M-3 48 Q-28 32 -35 20" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
       </g>
       <g transform="rotate(${-armRot}, 3, 48)">
-        <path d="M3 48 Q28 32 35 20" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
+        <path d="M3 48 Q28 32 35 20" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
       </g>
-      <path d="M-1 88 Q-10 112 -18 138" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M1 88 Q10 112 18 138" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M-1 88 Q-10 112 -18 138" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M1 88 Q10 112 18 138" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
     </g>`;
   },
 
@@ -354,11 +379,11 @@ export const poses = {
       ${drawBlush(0, 22, 'error')}
       ${drawEyes(0, 20, 'error')}
       ${drawMouth(0, 32, 'error')}
-      <path d="M0 40 Q${-5 + shake * 0.3} 52 -8 62" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M-6 48 Q-28 50 -35 58" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M2 50 Q18 44 24 50" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M-10 62 Q-28 72 -38 85" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M-6 62 Q8 75 18 85" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M0 40 Q${-5 + shake * 0.3} 52 -8 62" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M-6 48 Q-28 50 -35 58" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M2 50 Q18 44 24 50" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-10 62 Q-28 72 -38 85" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M-6 62 Q8 75 18 85" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
     </g>`;
   },
 
@@ -381,17 +406,17 @@ export const poses = {
       ${drawBlush(0, 22, 'user_typing')}
       ${drawEyes(0, 20, 'user_typing')}
       ${drawMouth(0, 32, 'user_typing')}
-      <path d="M0 40 Q-2 65 -1 88" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M0 40 Q-2 65 -1 88" fill="none" stroke="${getColor()}" stroke-width="2.5" stroke-linecap="round"/>
       <!-- arms: one reaching up to catch, other down -->
-      <path d="M-3 50 Q${-18 - leftArmUp * 8} ${46 - leftArmUp * 16} ${-22 - leftArmUp * 6} ${35 - leftArmUp * 14}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-      <path d="M3 50 Q${18 + rightArmUp * 8} ${46 - rightArmUp * 16} ${22 + rightArmUp * 6} ${35 - rightArmUp * 14}" fill="none" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
+      <path d="M-3 50 Q${-18 - leftArmUp * 8} ${46 - leftArmUp * 16} ${-22 - leftArmUp * 6} ${35 - leftArmUp * 14}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
+      <path d="M3 50 Q${18 + rightArmUp * 8} ${46 - rightArmUp * 16} ${22 + rightArmUp * 6} ${35 - rightArmUp * 14}" fill="none" stroke="${getColor()}" stroke-width="2" stroke-linecap="round"/>
       <!-- legs: running fast -->
       ${(() => {
         const legPath = (ox, bend, rot) => {
           const bow = bend * 14;
           const tuck = bend * 18;
           return '<g transform="rotate(' + rot + ', ' + ox + ', 88)">' +
-            '<path d="M' + ox + ' 88 C' + (ox + 6 + bow) + ' 102 ' + (ox + 10 + bow) + ' ' + (124 - tuck) + ' ' + (ox + 14) + ' ' + (146 - tuck) + '" fill="none" stroke="#e0e0e0" stroke-width="2.5" stroke-linecap="round"/>' +
+            '<path d="M' + ox + ' 88 C' + (ox + 6 + bow) + ' 102 ' + (ox + 10 + bow) + ' ' + (124 - tuck) + ' ' + (ox + 14) + ' ' + (146 - tuck) + '" fill="none" stroke="' + getColor() + '" stroke-width="2.5" stroke-linecap="round"/>' +
             '</g>';
         };
         return legPath(-2, bendL, sL * 25) + legPath(2, bendR, sR * 25);

@@ -1,5 +1,6 @@
 import { renderPose } from './renderer.js';
 import { renderDecorations } from './decorations.js';
+import { toggleTheme, getTheme, getMenu } from './theme.js';
 
 const svg = document.getElementById('pet-svg');
 const container = document.getElementById('pet-container');
@@ -11,6 +12,17 @@ let isUserTyping = false;
 let animTime = 0;
 let lastFrameTime = performance.now();
 let isVisible = true;
+
+// Animation speed
+const SPEED_OPTIONS = [0.5, 1.0, 1.5, 2.0];
+let animSpeedIdx = 1;
+let animSpeed = SPEED_OPTIONS[animSpeedIdx];
+function cycleSpeed() {
+  animSpeedIdx = (animSpeedIdx + 1) % SPEED_OPTIONS.length;
+  animSpeed = SPEED_OPTIONS[animSpeedIdx];
+  try { localStorage.setItem('code-pet-speed', animSpeed); } catch {}
+}
+try { const s = parseFloat(localStorage.getItem('code-pet-speed')); if (SPEED_OPTIONS.includes(s)) { animSpeed = s; animSpeedIdx = SPEED_OPTIONS.indexOf(s); } } catch {}
 
 // Transition
 let transitioning = false;
@@ -71,7 +83,7 @@ function animate(now) {
 
   const dt = (now - lastFrameTime) / 1000;
   lastFrameTime = now;
-  animTime += dt;
+  animTime += dt * animSpeed;
 
   const effective = getEffectiveState();
 
@@ -184,7 +196,8 @@ container.addEventListener('contextmenu', (e) => {
 
   const menu = document.createElement('div');
   menu.id = 'ctx-menu';
-  menu.style.cssText = 'position:fixed;background:#2a2a2a;border:1px solid #555;border-radius:6px;padding:4px 0;z-index:9999;min-width:140px;font-size:12px;color:#e0e0e0;';
+  const m = getMenu();
+  menu.style.cssText = `position:fixed;background:${m.menuBg};border:1px solid ${m.menuBorder};border-radius:6px;padding:4px 0;z-index:9999;min-width:140px;font-size:12px;color:${m.menuText};`;
   // Clamp position so menu stays within the small window
   const menuW = 144, menuH = 90;
   const x = Math.min(e.clientX, window.innerWidth - menuW - 2);
@@ -193,6 +206,8 @@ container.addEventListener('contextmenu', (e) => {
   menu.style.top = Math.max(0, y) + 'px';
 
   const items = [
+    { label: `Theme: ${getTheme() === 'dark' ? 'Dark' : 'Light'}`, action: toggleTheme },
+    { label: `Speed: ${animSpeed}x`, action: cycleSpeed },
     { label: 'Reset Position', action: resetPosition },
     { label: `Size: ${currentSize}`, action: cycleSize },
     { label: 'Quit', action: quitApp },
@@ -202,7 +217,7 @@ container.addEventListener('contextmenu', (e) => {
     const item = document.createElement('div');
     item.textContent = label;
     item.style.cssText = 'padding:6px 16px;cursor:pointer;';
-    item.addEventListener('mouseenter', () => item.style.background = '#444');
+    item.addEventListener('mouseenter', () => item.style.background = getMenu().menuHover);
     item.addEventListener('mouseleave', () => item.style.background = 'none');
     item.addEventListener('click', () => { menu.remove(); action(); });
     menu.appendChild(item);
