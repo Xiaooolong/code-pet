@@ -190,20 +190,38 @@ container.addEventListener('click', () => {
 const SIZES = { small: [100, 120], medium: [150, 180], large: [220, 260] };
 let currentSize = 'medium';
 
-container.addEventListener('contextmenu', (e) => {
+container.addEventListener('contextmenu', async (e) => {
   e.preventDefault();
   document.getElementById('ctx-menu')?.remove();
+
+  // Always expand window to menu size so items are never clipped
+  const menuW = 160, menuH = 180;
+  if (window.__TAURI__) {
+    try {
+      const win = window.__TAURI__.window.getCurrentWindow();
+      await win.setSize(new window.__TAURI__.window.LogicalSize(
+        Math.max(SIZES[currentSize][0], menuW), Math.max(SIZES[currentSize][1], menuH)
+      ));
+    } catch {}
+  }
 
   const menu = document.createElement('div');
   menu.id = 'ctx-menu';
   const m = getMenu();
   menu.style.cssText = `position:fixed;background:${m.menuBg};border:1px solid ${m.menuBorder};border-radius:6px;padding:4px 0;z-index:9999;min-width:140px;font-size:12px;color:${m.menuText};`;
-  // Clamp position so menu stays within the small window
-  const menuW = 144, menuH = 90;
-  const x = Math.min(e.clientX, window.innerWidth - menuW - 2);
-  const y = Math.min(e.clientY, window.innerHeight - menuH - 2);
-  menu.style.left = Math.max(0, x) + 'px';
-  menu.style.top = Math.max(0, y) + 'px';
+  menu.style.left = '4px';
+  menu.style.top = '4px';
+
+  // Restore to current pet size
+  const restoreWindow = async () => {
+    if (window.__TAURI__) {
+      try {
+        const win = window.__TAURI__.window.getCurrentWindow();
+        const [w, h] = SIZES[currentSize];
+        await win.setSize(new window.__TAURI__.window.LogicalSize(w, h));
+      } catch {}
+    }
+  };
 
   const items = [
     { label: `Theme: ${getTheme() === 'dark' ? 'Dark' : 'Light'}`, action: toggleTheme },
@@ -219,13 +237,20 @@ container.addEventListener('contextmenu', (e) => {
     item.style.cssText = 'padding:6px 16px;cursor:pointer;';
     item.addEventListener('mouseenter', () => item.style.background = getMenu().menuHover);
     item.addEventListener('mouseleave', () => item.style.background = 'none');
-    item.addEventListener('click', () => { menu.remove(); action(); });
+    item.addEventListener('click', async () => { menu.remove(); await action(); restoreWindow(); });
     menu.appendChild(item);
   });
 
   document.body.appendChild(menu);
-  const dismiss = (ev) => { if (!menu.contains(ev.target)) { menu.remove(); document.removeEventListener('click', dismiss); }};
-  setTimeout(() => document.addEventListener('click', dismiss), 0);
+  const dismiss = (ev) => {
+    if (!document.body.contains(menu)) { document.removeEventListener('click', dismiss); return; }
+    if (!menu.contains(ev.target)) {
+      menu.remove();
+      document.removeEventListener('click', dismiss);
+      restoreWindow();
+    }
+  };
+  setTimeout(() => document.addEventListener('click', dismiss), 100);
 });
 
 async function resetPosition() {

@@ -6,7 +6,9 @@ A hand-drawn stick figure lives in a transparent always-on-top window and animat
 
 [![English](https://img.shields.io/badge/lang-English-blue)](./README.md) [![中文](https://img.shields.io/badge/lang-中文-red)](./README.zh-CN.md)
 
-![demo](./assets/demo.gif)
+![demo](./assets/demo-screenshot.png)
+
+![animations](./assets/demo.gif)
 
 ## How It Works
 
