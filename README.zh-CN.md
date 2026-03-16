@@ -71,16 +71,19 @@
 
 ## 安装
 
-### 前置要求
+### 方式一：下载安装包（推荐）
 
-- Windows 10/11
-- [Rust](https://rustup.rs/) + cargo
-- [Tauri v2 CLI](https://v2.tauri.app/start/prerequisites/)
-- Claude Code
+从 [Releases](https://github.com/Xiaooolong/code-pet/releases) 下载最新安装包，然后安装 hooks：
 
-### 步骤
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File scripts/install-hooks.ps1
+```
 
-1. **编译运行**
+重启 Claude Code，即可使用。
+
+### 方式二：从源码构建
+
+**前置要求：** Windows 10/11, [Rust](https://rustup.rs/) + cargo, [Tauri v2 CLI](https://v2.tauri.app/start/prerequisites/), Claude Code
 
 ```bash
 cd claude-pet
@@ -88,14 +91,13 @@ cargo tauri dev      # 开发模式
 cargo tauri build    # 生产构建
 ```
 
-2. **安装 hooks**
+安装 hooks：
 
 ```powershell
-cd claude-pet
 powershell.exe -ExecutionPolicy Bypass -File scripts/install-hooks.ps1
 ```
 
-3. **重启 Claude Code**，hook 即生效
+重启 Claude Code，hook 即生效。
 
 ### 卸载 hooks
 

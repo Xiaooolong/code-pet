@@ -27,6 +27,18 @@ A hand-drawn stick figure lives in a transparent always-on-top window and animat
 
 ## Quick Start
 
+### Option 1: Download pre-built installer (recommended)
+
+Download the latest installer from [Releases](https://github.com/Xiaooolong/code-pet/releases), then install hooks:
+
+```powershell
+powershell.exe -ExecutionPolicy Bypass -File scripts/install-hooks.ps1
+```
+
+Restart Claude Code — done!
+
+### Option 2: Build from source
+
 **Prerequisites:** Windows 10/11, [Rust](https://rustup.rs/), [Tauri v2 CLI](https://v2.tauri.app/start/prerequisites/), [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
 
 ```bash
